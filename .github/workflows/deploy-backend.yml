@@ -5,15 +5,9 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-permissions:
-  contents: read
-
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: backend
 
     steps:
       
@@ -29,15 +23,20 @@ name: Use Node 20
         cache-dependency-path: backend/package-lock.json
 
       
-name: Install deps (prod only)
+name: Install backend deps (prod only)
+      working-directory: backend
       run: npm ci --omit=dev
 
-      # Deploy the backend folder directly to wwwroot.
-      # This uploads backend/* (including node_modules) to /home/site/wwwroot.
+      
+name: Create deployable zip from backend/
+      run: |
+        cd backend
+        zip -r ../site.zip .
+
       
 name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v3
       with:
         app-name: icarusmai5
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        package: ./backend
+        package: site.zip
