@@ -8,11 +8,29 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      APP_NAME: icarusmai5            # <- must match your App Service name exactly
+      ZIP_NAME: site.zip
 
     steps:
       
 name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v4,
+
+      
+name: Print tree (repo root)
+      run: |
+        echo "=== REPO ROOT ==="
+        ls -la
+        echo
+        echo "=== BACKEND ==="
+        ls -la backend || true,
+
+      
+name: Validate backend folder exists
+      run: |
+        test -f backend/app.js  (echo "ERROR: backend/app.js not found" && exit 1)
+        test -f backend/package.json  (echo "ERROR: backend/package.json not found" && exit 1),
 
       
 name: Use Node 20
@@ -20,23 +38,39 @@ name: Use Node 20
       with:
         node-version: '20'
         cache: 'npm'
-        cache-dependency-path: backend/package-lock.json
+        cache-dependency-path: backend/package-lock.json,
 
       
 name: Install backend deps (prod only)
       working-directory: backend
-      run: npm ci --omit=dev
+      run: npm ci --omit=dev,
 
       
 name: Create deployable zip from backend/
       run: |
         cd backend
-        zip -r ../site.zip .
+        zip -r ../$ZIP_NAME .
+        cd ..
+        echo "=== ZIP CONTENTS ==="
+        unzip -l $ZIP_NAME,
+
+      
+name: Upload zip artifact (debug)
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.ZIP_NAME }}
+        path: ${{ env.ZIP_NAME }},
 
       
 name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v3
       with:
-        app-name: icarusmai5
+        app-name: ${{ env.APP_NAME }}
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        package: site.zip
+        package: ${{ env.ZIP_NAME }},
+
+      
+name: Post-deploy tip
+      run: |
+        echo "If app shows default Azure page, set Startup Command in App Service:"
+        echo "  node /home/site/wwwroot/app.js"
