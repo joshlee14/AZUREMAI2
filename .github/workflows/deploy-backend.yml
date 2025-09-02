@@ -1,6 +1,9 @@
 name: Deploy MAI Backend (manual)
+name: Deploy MAI Backend
 
 on:
+  push:
+    branches: ["main"]
   workflow_dispatch:
 
 jobs:
