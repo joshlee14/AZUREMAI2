@@ -1,0 +1,43 @@
+name: Deploy MAI Backend to Azure Web App
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      
+name: Checkout
+      uses: actions/checkout@v4
+
+      
+name: Use Node 20
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        cache-dependency-path: backend/package-lock.json
+
+      
+name: Install deps (prod only)
+      run: npm ci --omit=dev
+
+      # Deploy the backend folder directly to wwwroot.
+      # This uploads backend/* (including node_modules) to /home/site/wwwroot.
+      
+name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v3
+      with:
+        app-name: icarusmai5
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: ./backend
