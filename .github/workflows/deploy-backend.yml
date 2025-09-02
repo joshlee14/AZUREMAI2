@@ -1,65 +1,32 @@
-name: Deploy MAI Backend to Azure Web App
+name: Deploy MAI Backend (manual)
 
 on:
-  push:
-    branches:
-      
-main
-workflow_dispatch:,
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
-      APP_NAME: icarusmai5
-      ZIP_NAME: site.zip
-
     steps:
-      
-name: Checkout
-      uses: actions/checkout@v4,
+      - uses: actions/checkout@v4
 
-      
-name: Print tree
-      run: |
-        echo "=== REPO ROOT ==="
-        ls -la
-        echo
-        echo "=== BACKEND ==="
-        ls -la backend || true,
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-      
-name: Validate backend files
-      run: |
-        test -f backend/app.js  (echo "ERROR: backend/app.js not found" && exit 1)
-        test -f backend/package.json  (echo "ERROR: backend/package.json not found" && exit 1),
+      - name: Install deps
+        working-directory: backend
+        run: npm ci --omit=dev || npm install --production
 
-      
-name: Use Node 20
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-        cache: 'npm'
-        cache-dependency-path: backend/package-lock.json,
+      - name: Zip backend
+        run: |
+          cd backend
+          zip -r ../site.zip .
+          cd ..
+          unzip -l site.zip
 
-      
-name: Install deps (prod only)
-      working-directory: backend
-      run: npm ci --omit=dev || npm install --production,
-
-      
-name: Create deployable zip from backend/
-      run: |
-        cd backend
-        zip -r ../$ZIP_NAME .
-        cd ..
-        echo "=== ZIP CONTENTS ==="
-        unzip -l $ZIP_NAME,
-
-      
-name: Deploy to Azure Web App
-      uses: azure/webapps-deploy@v3
-      with:
-        app-name: ${{ env.APP_NAME }}
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        package: ${{ env.ZIP_NAME }}
+      - name: Deploy to Azure
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: icarusmai5
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: site.zip
