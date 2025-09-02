@@ -1,0 +1,146 @@
+:host, :root { all: initial; }
+
+.maihud {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  width: 360px;
+  height: 540px;
+  background: #0f172a;
+  color: #e2e8f0;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+  z-index: 2147483647;
+  display: flex;
+  flex-direction: column;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans";
+}
+
+.maihud * {
+  box-sizing: border-box;
+}
+
+.maihud-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: #111827;
+  border-bottom: 1px solid #374151;
+  cursor: move;
+}
+
+.maihud-header img {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+}
+
+.maihud-title {
+  font-size: 14px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.maihud-controls {
+  display: flex;
+  gap: 6px;
+}
+
+.maihud-btn {
+  background: #1f2937;
+  border: 1px solid #374151;
+  color: #d1d5db;
+  padding: 4px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.maihud-btn:hover {
+  background: #111827;
+}
+
+.maihud-tabs {
+  display: flex;
+  gap: 6px;
+  padding: 8px;
+  border-bottom: 1px solid #334155;
+}
+
+.maihud-tab {
+  padding: 6px 10px;
+  background: #0b1220;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.maihud-tab.active {
+  background: #1d283a;
+  color: #fff;
+}
+
+.maihud-body {
+  flex: 1;
+  overflow: auto;
+  padding: 10px;
+}
+
+.placeholder {
+  padding: 8px;
+  background: #0b1220;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #e2e8f0;
+}
+
+.resizer {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  right: 2px;
+  bottom: 2px;
+  cursor: nwse-resize;
+  background: linear-gradient(135deg, transparent 50%, #475569 50%);
+  border-radius: 3px;
+}
+
+.collapsed .maihud-body,
+.collapsed .maihud-tabs {
+  display: none;
+}
+
+/* Additional styles for the plan search form and results.  These classes
+ * will be used in a future patch when the plans tab is implemented.
+ */
+.plans-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.plans-input {
+  width: 100%;
+  padding: 6px;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  background: #0b1220;
+  color: #e2e8f0;
+}
+
+.plans-results {
+  display: grid;
+  gap: 8px;
+}
+
+.plan-item {
+  background: #0b1220;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 8px;
+}

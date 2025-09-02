@@ -1,0 +1,78 @@
+{
+  "manifest_version": 3,
+  "name": "Project Icarus — MAI Copilot",
+  "version": "2.0.0",
+  "description": "Copilot HUD for Medicare Advantage agents (Checklist / Rebuttals / Drugs)",
+
+  // When the user clicks the toolbar icon the background script will
+  // toggle the HUD on the current Sunfire tab. No popup is defined.
+  "action": {
+    "default_title": "Open MAI Copilot"
+  },
+
+  // Permissions for storage (to persist HUD position/size), tab messaging
+  // (to communicate between the action and content script) and activeTab to
+  // allow sending messages to the current tab.
+  "permissions": [
+    "storage",
+    "tabs",
+    "activeTab"
+  ],
+
+  // Background service worker which listens for the action click and
+  // dispatches a toggle message to the content script.
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+
+  // Inject the MAI HUD onto all Sunfire pages. Runs at document_end in
+  // all frames so the HUD appears even within nested iframes.
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.sunfirematrix.com/*",
+        "https://sunfirematrix.com/*"
+      ],
+      "js": ["contentScript.js"],
+      "css": ["hud.css"],
+      "run_at": "document_end",
+      "all_frames": true
+    }
+  ],
+
+  // Expose our icons and HUD stylesheet to pages via chrome.runtime.getURL() so
+  // they can be loaded into the Shadow DOM.
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "icons/*",
+        "hud.css"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ],
+
+  // Host permissions: allow the extension to fetch from our Azure app service
+  // or localhost for development and inject into Sunfire pages. Replace
+  // icarusmai5-fkh7gge6edh6aabj.centralus-01.azurewebsites.net with your own
+  // domain if deploying under a custom APIM URL.
+  "host_permissions": [
+    "https://icarusmai5-fkh7gge6edh6aabj.centralus-01.azurewebsites.net/*",
+    "http://localhost:3000/*",
+    "https://*.sunfirematrix.com/*",
+    "https://sunfirematrix.com/*"
+  ],
+
+  // Provide an options page so the user can configure the API base URL.
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

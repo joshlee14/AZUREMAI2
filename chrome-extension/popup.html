@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Project Icarus</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="container">
+    <h1>Icarus Plan Finder</h1>
+    <form id="clientForm">
+      <label>ZIP Code:
+        <input type="text" id="zip" required>
+      </label>
+      <!-- Removed Date of Birth field.  DOB will be scraped from Sunfire if needed. -->
+      <label>
+        <input type="checkbox" id="medicaid"> Medicaid
+      </label>
+      <label>
+        <input type="checkbox" id="lis"> Low-Income Subsidy (LIS)
+      </label>
+      <label>
+        <input type="checkbox" id="dsnp"> Dual-Eligible SNP (D-SNP)
+      </label>
+      <fieldset>
+        <legend>Chronic Conditions</legend>
+        <label><input type="checkbox" name="chronic" value="Diabetes"> Diabetes</label>
+        <label><input type="checkbox" name="chronic" value="Heart Disease"> Heart Disease</label>
+        <label><input type="checkbox" name="chronic" value="COPD"> COPD</label>
+      </fieldset>
+      <fieldset>
+        <legend>Desired Benefits</legend>
+        <label><input type="checkbox" name="benefit" value="Dental"> Dental</label>
+        <label><input type="checkbox" name="benefit" value="Vision"> Vision</label>
+        <label><input type="checkbox" name="benefit" value="OTC"> OTC</label>
+        <label><input type="checkbox" name="benefit" value="Hearing"> Hearing</label>
+        <label><input type="checkbox" name="benefit" value="Gym"> Gym</label>
+        <label><input type="checkbox" name="benefit" value="Insulin"> Insulin</label>
+      </fieldset>
+      <button type="submit" id="submitBtn">Submit</button>
+      <button type="button" id="recommendBtn">Recommend Plan</button>
+    </form>
+    <div id="result"></div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>MAI Copilot Options</title>
+    <style>
+      body {
+        font-family: Segoe UI, Roboto, Arial, sans-serif;
+        background: #0f172a;
+        color: #e2e8f0;
+        padding: 20px;
+      }
+      input {
+        width: 100%;
+        max-width: 460px;
+        padding: 8px;
+        border-radius: 8px;
+        border: 1px solid #334155;
+        background: #0b1220;
+        color: #e2e8f0;
+      }
+      button {
+        margin-top: 12px;
+        padding: 6px 12px;
+        border-radius: 8px;
+        border: 1px solid #374151;
+        background: #1f2937;
+        color: #d1d5db;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #111827;
+      }
+      #msg {
+        margin-left: 8px;
+        opacity: .8;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>MAI Copilot — API Settings</h2>
+    <p>
+      Enter the base URL of your MAI backend (e.g., your Azure App Service or
+      API Management endpoint).  Do not include a trailing slash.  The
+      default value is pre‑filled below.
+    </p>
+    <label>
+      API Base URL:<br />
+      <input id="apiBase" type="text" />
+    </label>
+    <div>
+      <button id="saveBtn">Save</button>
+      <span id="msg"></span>
+    </div>
+    <script src="options.js"></script>
+  </body>
+</html>
