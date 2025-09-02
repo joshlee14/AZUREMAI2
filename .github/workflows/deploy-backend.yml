@@ -15,7 +15,7 @@ jobs:
     steps:
       
 name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v4,
 
       
 name: Sanity check tree
@@ -24,13 +24,13 @@ name: Sanity check tree
         ls -la
         echo
         echo "=== BACKEND ==="
-        ls -la backend || true
+        ls -la backend || true,
 
       
 name: Validate backend has app.js and package.json
       run: |
         test -f backend/app.js  (echo "ERROR: backend/app.js not found" && exit 1)
-        test -f backend/package.json  (echo "ERROR: backend/package.json not found" && exit 1)
+        test -f backend/package.json  (echo "ERROR: backend/package.json not found" && exit 1),
 
       
 name: Use Node 20
@@ -38,12 +38,12 @@ name: Use Node 20
       with:
         node-version: '20'
         cache: 'npm'
-        cache-dependency-path: backend/package-lock.json
+        cache-dependency-path: backend/package-lock.json,
 
       
 name: Install deps (prod only)
       working-directory: backend
-      run: npm ci --omit=dev || npm install --production
+      run: npm ci --omit=dev || npm install --production,
 
       
 name: Create deployable zip from backend/
@@ -52,14 +52,14 @@ name: Create deployable zip from backend/
         zip -r ../$ZIP_NAME .
         cd ..
         echo "=== ZIP CONTENTS ==="
-        unzip -l $ZIP_NAME
+        unzip -l $ZIP_NAME,
 
       
 name: Upload zip artifact (debug)
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.ZIP_NAME }}
-        path: ${{ env.ZIP_NAME }}
+        path: ${{ env.ZIP_NAME }},
 
       
 name: Deploy to Azure Web App
@@ -67,7 +67,7 @@ name: Deploy to Azure Web App
       with:
         app-name: ${{ env.APP_NAME }}
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        package: ${{ env.ZIP_NAME }}
+        package: ${{ env.ZIP_NAME }},
 
       
 name: Post-deploy reminder
